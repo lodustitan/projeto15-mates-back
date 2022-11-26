@@ -3,10 +3,20 @@ import express from "express";
 import cors from "cors";
 
 /* Middlewares */
-import { getGameByIDValidate } from "../middleware/games.validation.js";
+import { 
+    getGameByIDValidate, 
+    addCartByIDValidate, 
+    getCartByIDValidate,
+    buyGamesOnCartValidate
+} from "../middleware/games.validation.js";
 
 /* Controllers */
-import { getGameByID } from "../controller/games.controller.js";
+import { 
+    getGameByID, 
+    addCartByID, 
+    getCartByID, 
+    buyGamesOnCart
+} from "../controller/games.controller.js";
 
 
 const app = express();
@@ -14,6 +24,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/game/:id", getGameByIDValidate, getGameByID);
+app.get("/game/:game_id", getGameByIDValidate, getGameByID);
+app.post("/cart", addCartByIDValidate, addCartByID);
+app.get("/cart", getCartByIDValidate, getCartByID);
+app.post("/checkout", buyGamesOnCartValidate, buyGamesOnCart)
 
 export default app;
