@@ -2,7 +2,8 @@ import {
     getDataGameByID_repo, 
     addCartByUserID_repo,
     getCartByUserID_repo,
-    addBibliotecaGameByID_repo
+    addBibliotecaGameByID_repo,
+    getMyGames_repo
 } from "../repository/repo.js";
 
 export async function buyGamesOnCart(req, res){
@@ -40,14 +41,35 @@ export async function addCartByID(req, res){
         res.status(201).send(doc);
     }
 }
-export async function getCartByID(req, res, next){
+export async function getCartByID(req, res){
     let { user_id } = res.locals;
 
-    const doc = await getCartByUserID_repo(user_id);
+    try{
+        const doc = await getCartByUserID_repo(user_id);
+    
+        if(!doc){
+            res.status(404).send("Não foi encontrado.");
+        } else {
+            res.status(201).send(doc);
+        }
+    }catch(err){
+        console.error(err);
+        res.status(500);
+    }
+}
+export async function getMyGames(req, res){
+    let { user_id } = res.locals;
 
-    if(!doc){
-        res.status(404).send("Não foi encontrado.");
-    } else {
-        res.status(201).send(doc);
+    try{
+        const doc = await getMyGames_repo(user_id);
+    
+        if(!doc){
+            res.status(404).send("Você não possui games comprados.");
+        } else {
+            res.status(201).send(doc);
+        }
+    }catch(err){
+        console.error(err);
+        res.status(500);
     }
 }

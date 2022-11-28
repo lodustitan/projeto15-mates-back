@@ -54,7 +54,7 @@ export async function addCartByIDValidate(req, res, next){
         return;
     }
 }
-export async function getCartByIDValidate(req, res, next){
+export async function verifyUserId(req, res, next){
     let { user_id } = req.headers;
 
     try {

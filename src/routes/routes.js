@@ -1,12 +1,11 @@
 /* Tools */
-import express from "express";
-import cors from "cors";
+import express, { Router }  from "express";
 
 /* Middlewares */
 import { 
     getGameByIDValidate, 
     addCartByIDValidate, 
-    getCartByIDValidate,
+    verifyUserId,
     buyGamesOnCartValidate
 } from "../middleware/games.validation.js";
 
@@ -15,18 +14,26 @@ import {
     getGameByID, 
     addCartByID, 
     getCartByID, 
-    buyGamesOnCart
+    buyGamesOnCart,
+    getMyGames
 } from "../controller/games.controller.js";
+import {
+    SignIn,
+    SignUp,
+    gamesCollection
+} from "../controller/authController.js";
 
 
-const app = express();
 
-app.use(cors());
-app.use(express.json());
+const routes = Router();
 
-app.get("/game/:game_id", getGameByIDValidate, getGameByID);
-app.post("/cart", addCartByIDValidate, addCartByID);
-app.get("/cart", getCartByIDValidate, getCartByID);
-app.post("/checkout", buyGamesOnCartValidate, buyGamesOnCart)
+routes.get("/game/:game_id", getGameByIDValidate, getGameByID);
+routes.get("/mygames", verifyUserId, getMyGames);
+routes.post("/cart", addCartByIDValidate, addCartByID);
+routes.get("/cart", verifyUserId, getCartByID);
+routes.post("/checkout", buyGamesOnCartValidate, buyGamesOnCart);
+routes.post("/signup", SignUp);
+routes.post("/signin", SignIn);
+routes.get("/games", gamesCollection);
 
-export default app;
+export default routes;
